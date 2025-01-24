@@ -18,25 +18,27 @@ class Editor extends React.Component {
     public currentRoomName: string = ''
 
     public onCreated(): void {
-        this.collaborativeEditingHandler = this.container.documentEditor.collaborativeEditingHandlerModule;
-        this.container.contentChange = (args: ContainerContentChangeEventArgs) => {
-            if (this.collaborativeEditingHandler) {
-                //Send the editing action to server
-                this.collaborativeEditingHandler.sendActionToServer(args.operations as Operation[])
+        this.collaborativeEditingHandler = this.container?.documentEditor.collaborativeEditingHandlerModule;
+        if (this.container) {
+            this.container.contentChange = (args: ContainerContentChangeEventArgs) => {
+                if (this.collaborativeEditingHandler) {
+                    //Send the editing action to server
+                    this.collaborativeEditingHandler.sendActionToServer(args.operations as Operation[])
+                }
             }
         }
         if (!this.connection) {
             this.initializeSignalR();
             this.loadDocumentFromServer();
         }
-        this.titleBar.updateDocumentTitle();
+        this.titleBar?.updateDocumentTitle();
     }
 
     public componentDidMount(): void {
         window.onbeforeunload = function () {
             return 'Want to save your changes?';
         }
-        if (this.container) {           
+        if (this.container) {
             this.container.documentEditor.pageOutline = '#E0E0E0';
             this.container.documentEditor.acceptTab = true;
             this.container.documentEditor.resize();
@@ -96,7 +98,7 @@ class Editor extends React.Component {
         let data = JSON.parse(responseText);
         if (this.container) {
             //Update the room and version information to collaborative editing handler.
-            this.collaborativeEditingHandler.updateRoomInfo(roomName, data.version, this.serviceUrl + 'api/CollaborativeEditing/');
+            this.collaborativeEditingHandler?.updateRoomInfo(roomName, data.version, this.serviceUrl + 'api/CollaborativeEditing/');
 
             //Open the document
             this.container.documentEditor.open(data.sfdt);
@@ -104,7 +106,7 @@ class Editor extends React.Component {
             setTimeout(() => {
                 if (this.container) {
                     // connect to server using signalR
-                    this.connectToRoom({ action: 'connect', roomName: roomName, currentUser: this.container.currentUser });
+                    this.connectToRoom({ action: 'connect', roomName: roomName, currentUser: this.container.currentUser, documentOwner: "foo" });
                 }
             });
         }
@@ -138,7 +140,7 @@ class Editor extends React.Component {
                 }
             }
         };
-        httpRequest.send(JSON.stringify({ "fileName": "Giant Panda.docx", "roomName": roomId }));
+        httpRequest.send(JSON.stringify({ "fileName": "Giant Panda.docx", "roomName": roomId, "documentOwner": "foo" }));
     }
 
     public connectToRoom(data: any) {

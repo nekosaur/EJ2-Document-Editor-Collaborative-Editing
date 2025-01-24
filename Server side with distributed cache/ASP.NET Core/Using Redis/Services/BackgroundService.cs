@@ -58,6 +58,7 @@ namespace WebApplication1.Service
         {
             // Load the document
             Syncfusion.EJ2.DocumentEditor.WordDocument document = CollaborativeEditingController.GetSourceDocument();
+            document.OptimizeSfdt = false;
             CollaborativeEditingHandler handler = new CollaborativeEditingHandler(document);
 
             // Process previous items
@@ -76,14 +77,15 @@ namespace WebApplication1.Service
                     //Apply the operation to source document.
                     handler.UpdateAction(actions[i]);
                 }
-                MemoryStream stream = new MemoryStream();
-                Syncfusion.DocIO.DLS.WordDocument doc = WordDocument.Save(Newtonsoft.Json.JsonConvert.SerializeObject(handler.Document));
-                doc.Save(stream, Syncfusion.DocIO.FormatType.Docx);
+                // MemoryStream stream = new MemoryStream();
+                // Syncfusion.DocIO.DLS.WordDocument doc = WordDocument.Save(Newtonsoft.Json.JsonConvert.SerializeObject(handler.Document));
+                // doc.Save(stream, Syncfusion.DocIO.FormatType.Docx);
 
                 //Save the document to file location. We can modified the below code and save the document to any location.
                 //Save the stream to the location you want.
-                SaveDocument(stream, "Getting Started.docx");
-                stream.Close();
+                // SaveDocument(stream, "Giant Panda.docx");
+                // stream.Close();
+                File.WriteAllText(fileLocation + "/TableHeader.json", Newtonsoft.Json.JsonConvert.SerializeObject(handler.Document));
                 document.Dispose();
                 handler = null;
             }

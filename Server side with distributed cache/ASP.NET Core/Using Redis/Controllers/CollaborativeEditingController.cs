@@ -48,6 +48,7 @@ namespace WebApplication1.Controllers
                 // In this case, 'Giant Panda.docx' file from the wwwroot folder is opened.
                 // We can modify the code to retrieve the document from a different location or source.
                 Syncfusion.EJ2.DocumentEditor.WordDocument document = GetSourceDocument();
+                document.OptimizeSfdt = false;
                 // Get the list of pending operations for the document
                 List<ActionInfo> actions = await GetPendingOperations(param.fileName, 0, -1);
                 if (actions != null && actions.Count > 0)
@@ -251,13 +252,16 @@ namespace WebApplication1.Controllers
 
         internal static Syncfusion.EJ2.DocumentEditor.WordDocument GetSourceDocument()
         {
-            string path = fileLocation + "\\Giant Panda.docx";
-            int index = path.LastIndexOf('.');
-            string type = index > -1 && index < path.Length - 1 ?
-              path.Substring(index) : ".docx";
-            Stream stream = System.IO.File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-            Syncfusion.EJ2.DocumentEditor.WordDocument document = Syncfusion.EJ2.DocumentEditor.WordDocument.Load(stream, GetFormatType(type));
-            stream.Dispose();
+            string path = fileLocation + "/TableHeader.json";
+            // int index = path.LastIndexOf('.');
+            // string type = index > -1 && index < path.Length - 1 ?
+            //   path.Substring(index) : ".docx";
+            // Stream stream = System.IO.File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            // Syncfusion.EJ2.DocumentEditor.WordDocument document = Syncfusion.EJ2.DocumentEditor.WordDocument.Load(stream, GetFormatType(type));
+            // stream.Dispose();
+            var str = System.IO.File.ReadAllText(path);
+            var doc = Syncfusion.EJ2.DocumentEditor.WordDocument.Save(str);
+            var document = Syncfusion.EJ2.DocumentEditor.WordDocument.Load(doc);
             return document;
         }
 

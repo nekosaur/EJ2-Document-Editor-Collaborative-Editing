@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Backend",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Platform.Web-build",
+            "program": "${workspaceFolder}/Server side with distributed cache/ASP.NET Core/Using Redis/bin/Debug/net8.0/WebApplication1.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Server side with distributed cache/ASP.NET Core/Using Redis",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        }
+    ],
+}
